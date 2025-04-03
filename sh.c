@@ -25,16 +25,30 @@ The group members declare that they have not copied material from the Internet
 Fill in the lines below with the name and email of the group members.
 Replace XX with the contribution of each group member in the development of the work.
 
-Name <email@ufmg.br> XX%
+Carla Beatriz Ferreira <carlabferreira@ufmg.br> XX%
 Name <email@ufmg.br> XX%
 
 3. Solutions
-
 Briefly describe the solutions implemented for this project and justify their choices.
 
-4. Bibliographic references
+- Correção da Função fork1:
+//TODO
 
+- Executando comandos simples:
+//TODO
+
+- Redirecionamento de Entrada e Saída
+//TODO
+
+- Sequenciamento de Comandos
+// TODO
+
+
+4. Bibliographic references
 Add the bibliographic references here.
+
+- Livro Texto; Slides do professor; vídeos do youtube
+//TODO
 
 */
 

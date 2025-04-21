@@ -49,9 +49,20 @@ Solução apresentada no bloco correspondente (na main).
 
 
 4. Bibliographic references
-Add the bibliographic references here.
 
-- Livro Texto; Slides do professor; vídeos do youtube
+- SILBERSCHATZ, Abraham; GALVIN, Peter Baer; GAGNE, Greg. Fundamentos de Sistemas Operacionais. 
+    8. ed. LTC.
+
+- TEODORO, George Luiz Medeiros. Slides virtuais da disciplina de Sistemas Operacionais. 
+    Disponibilizado via Moodle. Departamento de Ciência da Computação, Universidade Federal de Minas Gerais, 
+    Belo Horizonte.
+
+- GNU. Bash Reference Manual. Disponível em: https://www.gnu.org/software/bash/manual/bash.html. 
+    Acesso em: 15 jan. 2024.
+
+
+
+? - vídeos do youtube
 TODO
 
 */

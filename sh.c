@@ -27,6 +27,7 @@ Replace XX with the contribution of each group member in the development of the 
 
 Carla Beatriz Ferreira <carlabferreira@ufmg.br> XX%
 Name <email@ufmg.br> XX%
+todo completar nome, email e porcentagem
 
 3. Solutions
 Briefly describe the solutions implemented for this project and justify their choices.
@@ -42,6 +43,9 @@ TODO
 
 - Sequenciamento de Comandos
 TODO
+
+- Correção da mensagem de erro
+Solução apresentada no bloco correspondente (na main). 
 
 
 4. Bibliographic references
@@ -136,6 +140,7 @@ int fork1(void) {
     The function is supposed to create a new process using the `fork()` system call.
     It should print a message if the fork fails, otherwise return the process ID of the child process (or -1 if the fork fails).
     */
+   //todo
     fprintf(stderr, "Fork function not implemented\n");
     exit(-1);
     /* END OF TASK 1 */
@@ -143,18 +148,21 @@ int fork1(void) {
 
 void handle_simple_cmd(struct execcmd *ecmd) {
     /* Task 2: Implement the code below to execute simple commands. */
+    //todo
     fprintf(stderr, "exec not implemented\n");
     /* END OF TASK 2 */
 }
 
 void handle_redirection(struct redircmd *rcmd) {
     /* Task 3: Implement the code below to handle input/output redirection. */
+    //todo
     fprintf(stderr, "redir not implemented\n");
     /* END OF TASK 3 */
 }
 
 void handle_pipe(struct pipecmd *pcmd, int *p, int r) {
     /* Task 4: Implement the code below to handle pipes. */
+    //todo
     fprintf(stderr, "pipe not implemented\n");
     /* END OF TASK 4 */
 }
@@ -178,7 +186,7 @@ int main(void) {
         /* Task 5: Explain the purpose of the if statement below and correct the error message.
         Why is the current error message incorrect? Justify the new message. */
         /* Answer:
-
+            todo
          */
         if (buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' ') {
             buf[strlen(buf) - 1] = 0;

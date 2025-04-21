@@ -1,0 +1,3 @@
+chmod +x grade.sh
+dos2unix grade.sh
+make

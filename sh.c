@@ -32,23 +32,23 @@ Name <email@ufmg.br> XX%
 Briefly describe the solutions implemented for this project and justify their choices.
 
 - Correção da Função fork1:
-//TODO
+TODO
 
 - Executando comandos simples:
-//TODO
+TODO
 
 - Redirecionamento de Entrada e Saída
-//TODO
+TODO
 
 - Sequenciamento de Comandos
-// TODO
+TODO
 
 
 4. Bibliographic references
 Add the bibliographic references here.
 
 - Livro Texto; Slides do professor; vídeos do youtube
-//TODO
+TODO
 
 */
 

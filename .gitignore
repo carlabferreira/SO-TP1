@@ -1,0 +1,11 @@
+# Ignora o executável
+sh
+
+# Ignora arquivos temporários de sistema
+*.swp
+*.tmp
+*.bak
+
+# Ignora arquivos de build em geral
+*.out
+*.o

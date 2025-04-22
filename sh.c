@@ -25,15 +25,17 @@ The group members declare that they have not copied material from the Internet
 Fill in the lines below with the name and email of the group members.
 Replace XX with the contribution of each group member in the development of the work.
 
-Carla Beatriz Ferreira <carlabferreira@ufmg.br> XX%
-Name <email@ufmg.br> XX%
+Carla Beatriz Ferreira <carlabferreira@ufmg.br> 55%
+Name <email@ufmg.br> 45%
 todo completar nome, email e porcentagem
 
 3. Solutions
 Briefly describe the solutions implemented for this project and justify their choices.
 
 - Correção da Função fork1:
-TODO
+Implementamos a função `fork1` utilizando a syscall `fork()` com verificação de erro.
+A syscall 'fork()' já retorna em sua chamada o endereço que deve ser retornado na variavel pid ('Process ID')
+Caso falhe, imprime uma mensagem e encerra o programa.
 
 - Executando comandos simples:
 TODO
@@ -45,7 +47,8 @@ TODO
 TODO
 
 - Correção da mensagem de erro
-Solução apresentada no bloco correspondente (na main). 
+Solução apresentada no bloco correspondente (na main).
+Em resumo: cd = "change directory" e não busca por processos.
 
 
 4. Bibliographic references
@@ -61,6 +64,15 @@ Solução apresentada no bloco correspondente (na main).
     Acesso em: 15 abr. 2024.
 
 - THOMPSON, Ken; RITCHIE, Dennis M. The UNIX Time-Sharing System. Disponível em: https://www.scs.stanford.edu/17wi-cs140/sched/readings/unix.pdf. 
+    Acesso em: 15 abr. 2024.
+
+- LINUX MAN PAGES. close(2) - Linux manual page. Disponível em: https://linux.die.net/man/2/close. 
+    Acesso em: 15 abr. 2024.
+
+- LINUX MAN PAGES. fork(2) - Linux manual page. Disponível em: https://linux.die.net/man/2/fork. 
+    Acesso em: 15 abr. 2024.
+
+- LINUX MAN PAGES. pipe(2) - Linux manual page. Disponível em: https://linux.die.net/man/2/pipe. 
     Acesso em: 15 abr. 2024.
 
 ? - vídeos do youtube
@@ -125,7 +137,7 @@ void runcmd(struct cmd *cmd) {
             fprintf(stderr, "Unknown command type\n");
             exit(-1);
 
-        case ' ':
+        case ' ': //! citado pelo enunciado
             ecmd = (struct execcmd *)cmd;
             if (ecmd->argv[0] == 0)
                 exit(0);
@@ -152,29 +164,35 @@ int fork1(void) {
     The function is supposed to create a new process using the `fork()` system call.
     It should print a message if the fork fails, otherwise return the process ID of the child process (or -1 if the fork fails).
     */
-   //todo
-    fprintf(stderr, "Fork function not implemented\n");
-    exit(-1);
+    pid_t pid;
+
+    if ((pid = fork()) < 0) {
+        fprintf(stderr, "Fork function fails\n");
+        exit(-1);
+    } 
+    return (pid);
+
     /* END OF TASK 1 */
 }
 
 void handle_simple_cmd(struct execcmd *ecmd) {
-    /* Task 2: Implement the code below to execute simple commands. */
+     /* Task 2: Implement the code below to execute simple commands. */
     //todo
     fprintf(stderr, "exec not implemented\n");
     /* END OF TASK 2 */
 }
 
 void handle_redirection(struct redircmd *rcmd) {
-    /* Task 3: Implement the code below to handle input/output redirection. */
+     /* Task 3: Implement the code below to handle input/output redirection. */
     //todo
     fprintf(stderr, "redir not implemented\n");
     /* END OF TASK 3 */
 }
 
 void handle_pipe(struct pipecmd *pcmd, int *p, int r) {
-    /* Task 4: Implement the code below to handle pipes. */
-    //todo
+     /* Task 4: Implement the code below to handle pipes. */
+    //todo conferir!!! tenho um rascunho
+    /* */
     fprintf(stderr, "pipe not implemented\n");
     /* END OF TASK 4 */
 }
@@ -198,12 +216,14 @@ int main(void) {
         /* Task 5: Explain the purpose of the if statement below and correct the error message.
         Why is the current error message incorrect? Justify the new message. */
         /* Answer:
-            todo
+            A mensagem "process does not exist" está incorreta porque a função `cd` não cria processos 
+            mas sim muda o diretorio (cd = "change directory").
+            O erro nesse contexto vem do fato do diretório não existir ou não poder ser acessado.
          */
         if (buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' ') {
             buf[strlen(buf) - 1] = 0;
             if (chdir(buf + 3) < 0)
-                fprintf(stderr, "process does not exist\n");
+                fprintf(stderr, "Directory not found: %s\n", buf + 3);
             continue;
         }
         /* END OF TASK 5 */

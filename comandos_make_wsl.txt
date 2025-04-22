@@ -1,3 +1,4 @@
 chmod +x grade.sh
 dos2unix grade.sh
+chmod +x tests/*.sh
 make

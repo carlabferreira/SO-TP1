@@ -58,9 +58,10 @@ Solução apresentada no bloco correspondente (na main).
     Belo Horizonte.
 
 - GNU. Bash Reference Manual. Disponível em: https://www.gnu.org/software/bash/manual/bash.html. 
-    Acesso em: 15 jan. 2024.
+    Acesso em: 15 abr. 2024.
 
-
+- THOMPSON, Ken; RITCHIE, Dennis M. The UNIX Time-Sharing System. Disponível em: https://www.scs.stanford.edu/17wi-cs140/sched/readings/unix.pdf. 
+    Acesso em: 15 abr. 2024.
 
 ? - vídeos do youtube
 TODO

@@ -9,3 +9,6 @@ sh
 # Ignora arquivos de build em geral
 *.out
 *.o
+
+# Ignora a pasta de testes
+tests/

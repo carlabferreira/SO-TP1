@@ -26,7 +26,7 @@ Fill in the lines below with the name and email of the group members.
 Replace XX with the contribution of each group member in the development of the work.
 
 Carla Beatriz Ferreira <carlabferreira@ufmg.br> 55%
-Name <email@ufmg.br> 45%
+Manuela Monteiro Fernandes de Oliveira <manuelamfo@ufmg.br> 45%
 todo completar nome, email e porcentagem
 
 3. Solutions
@@ -77,6 +77,7 @@ Em resumo: cd = "change directory" e não busca por processos.
 
 ? - vídeos do youtube
 TODO
+//? usei https://www.digitalocean.com/community/tutorials/execvp-function-c-plus-plus para descobrir o que a função execvp faz, isso entra nas referências?
 
 */
 
@@ -177,8 +178,11 @@ int fork1(void) {
 
 void handle_simple_cmd(struct execcmd *ecmd) {
      /* Task 2: Implement the code below to execute simple commands. */
-    //todo
-    fprintf(stderr, "exec not implemented\n");
+    if (ecmd->argv[0] == 0)
+        exit(0); // Não havia comando para executar
+
+    // Execvp recebe o nome do comando e o vetor de argumentos e passa o controle do processo atual para o comando lido
+    execvp(ecmd->argv[0], ecmd->argv);
     /* END OF TASK 2 */
 }
 

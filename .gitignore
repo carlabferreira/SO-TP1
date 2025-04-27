@@ -10,5 +10,8 @@ sh
 *.out
 *.o
 
+
 # Ignora a pasta de testes
 tests/
+
+*.sh

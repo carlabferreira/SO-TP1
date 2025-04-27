@@ -38,7 +38,11 @@ A syscall 'fork()' já retorna em sua chamada o endereço que deve ser retornado
 Caso falhe, imprime uma mensagem e encerra o programa.
 
 - Executando comandos simples:
-TODO
+Implementamos a função 'handle_simple_cmd' para ler e executar comandos simples.
+
+Uma comparação é feita para verificar se existe algum comando a ser executado, caso ele seja inexixtente, o programa é encerrado.
+Caso contrário, a função 'execvp' recebe o nome do comando e um vetor de argumentos e passa o controle do processo 
+atual para o comando lido (que é essencialmente o que o comando exec faz)
 
 - Redirecionamento de Entrada e Saída
 TODO
@@ -78,6 +82,10 @@ Em resumo: cd = "change directory" e não busca por processos.
 ? - vídeos do youtube
 TODO
 //? usei https://www.digitalocean.com/community/tutorials/execvp-function-c-plus-plus para descobrir o que a função execvp faz, isso entra nas referências?
+! refs que usei pra responder a handle_redirection:
+https://www.geeksforgeeks.org/redirect-output-to-a-file-and-stdout/
+https://linux.die.net/man/3/open
+https://www.geeksforgeeks.org/dup-dup2-linux-system-call/
 
 */
 
@@ -178,18 +186,49 @@ int fork1(void) {
 
 void handle_simple_cmd(struct execcmd *ecmd) {
      /* Task 2: Implement the code below to execute simple commands. */
-    if (ecmd->argv[0] == 0)
-        exit(0); // Não havia comando para executar
+    if (ecmd->argv[0] == 0) //? eu preciso colocar essa verificação aqui? digo, porque ela já foi feita na função runcmd
 
-    // Execvp recebe o nome do comando e o vetor de argumentos e passa o controle do processo atual para o comando lido
+        exit(0);
+
     execvp(ecmd->argv[0], ecmd->argv);
     /* END OF TASK 2 */
 }
 
 void handle_redirection(struct redircmd *rcmd) {
      /* Task 3: Implement the code below to handle input/output redirection. */
-    //todo
-    fprintf(stderr, "redir not implemented\n");
+    if (rcmd->cmd == 0) //? eu preciso colocar essa verificação aqui? digo, porque ela já foi feita na função runcmd
+        exit(0);
+    
+    int fd = 0;
+    // tentativa de abrir o arquivo nos respectivos modos
+    if(rcmd->type == '<'){
+        fd = open(rcmd->file, O_RDONLY);
+        if(fd < 0) // caso haja erro na abertura do arquivo
+            exit(1);
+         else
+        {
+            int d = dup2(fd, 0); //? antes estava fd, rcmd->fd e o erro continuava, por que será?
+            close(fd);
+            if (d < 0) // erro na execução de dup2
+                exit(-1); 
+        }
+    }
+    else if(rcmd->type == '>')
+    {
+        fd = open(rcmd->file, O_WRONLY | O_CREAT | O_TRUNC, rcmd->mode);
+        if(fd < 0) // caso haja erro na abertura do arquivo
+            exit(1);
+         else
+        {
+            int d = dup2(fd, 1);
+            close(fd);
+            if (d < 0) // erro na execução de dup2
+                exit(-1); 
+        }
+    }
+    else
+        exit(1);
+
     /* END OF TASK 3 */
 }
 

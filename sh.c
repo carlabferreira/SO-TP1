@@ -94,15 +94,20 @@ Em resumo: cd = "change directory" e não busca por processos.
 - LINUX MAN PAGES. pipe(2) - Linux manual page. Disponível em: https://linux.die.net/man/2/pipe. 
     Acesso em: 15 abr. 2024.
 
-- How to use the execvp() function in C/C++ | DigitalOcean. Disponível em: <https://www.digitalocean.com/community/tutorials/execvp-function-c-plus-plus>. Acesso em: 26 abr. 2025.
+- How to use the execvp() function in C/C++ | DigitalOcean. Disponível em: <https://www.digitalocean.com/community/tutorials/execvp-function-c-plus-plus>. 
+    Acesso em: 26 abr. 2025.
 
-- GEEKSFORGEEKS. How to Redirect Output to a File and stdout. Disponível em: <https://www.geeksforgeeks.org/redirect-output-to-a-file-and-stdout/>. Acesso em: 26 abr. 2025.
+- GEEKSFORGEEKS. How to Redirect Output to a File and stdout. Disponível em: <https://www.geeksforgeeks.org/redirect-output-to-a-file-and-stdout/>. 
+    Acesso em: 26 abr. 2025.
 
-- open(3): open file - Linux man page. Disponível em: <https://linux.die.net/man/3/open>. Acesso em: 26 abr. 2025.
+- open(3): open file - Linux man page. Disponível em: <https://linux.die.net/man/3/open>. 
+    Acesso em: 26 abr. 2025.
 
-‌- dup() and dup2() Linux system call. Disponível em: <https://www.geeksforgeeks.org/dup-dup2-linux-system-call/>. Acesso em: 26 abr. 2025.
+‌- dup() and dup2() Linux system call. Disponível em: <https://www.geeksforgeeks.org/dup-dup2-linux-system-call/>. 
+    Acesso em: 26 abr. 2025.
 
-- JABK. What does dup2() do in C. Disponível em: <https://stackoverflow.com/questions/24538470/what-does-dup2-do-in-c>. Acesso em: 28 abr. 2025.
+- JABK. What does dup2() do in C. Disponível em: <https://stackoverflow.com/questions/24538470/what-does-dup2-do-in-c>. 
+    Acesso em: 28 abr. 2025.
 
 */
 
@@ -193,7 +198,7 @@ int fork1(void) {
     pid_t pid;
 
     if ((pid = fork()) < 0) {
-        //fprintf(stderr, "Fork function fails\n");
+        fprintf(stderr, "Fork function fails\n");
         exit(-1);
     } 
     return (pid);

@@ -1,0 +1,11 @@
+ls
+cd tests
+cd ..
+ls
+cd algumacoisa
+cat x.txt
+cat > x.txt
+Sistemas Operacionais é legal
+obrigada
+
+OBS: Para sair é necessário dar Ctrl + D

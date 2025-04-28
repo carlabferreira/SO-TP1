@@ -1,0 +1,12 @@
+ps aux > log.txt
+cat < log.txt | sort | uniq | wc > resultado.txt
+cat resultado.txt
+rm resultado.txt
+ls | grep .c | wc
+rm log.txt
+| ls
+ls
+cat sh.c
+echo "Sistemas Operacionais é legal" > x.txt
+cat < x.txt
+ls | sort | uniq | wc

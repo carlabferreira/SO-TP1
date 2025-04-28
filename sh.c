@@ -42,7 +42,9 @@ Implementamos a função 'handle_simple_cmd' para ler e executar comandos simple
 
 Uma comparação é feita para verificar se existe algum comando a ser executado, caso ele seja inexixtente, o programa é encerrado.
 Caso contrário, a função 'execvp' recebe o nome do comando e um vetor de argumentos e passa o controle do processo 
-atual para o comando lido (que é essencialmente o que o comando exec faz)
+atual para o comando lido. 
+
+Escolhemos implementar dessa forma, pois isso é essencialmente o que o comando exec faz
 
 - Redirecionamento de Entrada e Saída
 Implementamos a função 'handle_rdirection' para lidar com o redirecionamento de entrada e saída.
@@ -51,8 +53,17 @@ O arquivo é aberto com a função 'open' e as permissõs para leitura e escrita
 e leitura para outros usuários é definida. Então, um descritor de arquivo duplicado é criado com a função dup2, para possibilitar o redirecionamento da entrada e saída.
 Caso o redirecionamento seja de entrada, o descritor de arquivo é redirecionado para a entrada padrão (0), e se for de escrita, para a saída padrão(1).
 
+Escolhemos implementar dessa forma para possibilitar que os arquivos que estavam abertos com outros descritores pudessem ser duplicados e abertos com os descritores padrão de input/output.
+
 - Sequenciamento de Comandos
-TODO
+Implementamos a função 'handle_pipe' para lidar com o sequenciamento de comandos.
+
+Nela, um array de duas posições é criado para armazenar os descritores de escrita e leitura do pipe. Então, uma função 'pipe
+é aplicada ao array e, caso não haja erro, dois processos filhos são criados pela função fork1.
+Em cada um dos processos filho, o descritor de leitura ou escrita do pipe é fechado e a entrada ou saída padrão é redirecionada para a do pipe.
+Por fim, o comando à esquerda do pipe é executado no primeiro processo filho e o comando à direita, no segundo, e os valores de retorno são aguardados.
+
+Escolhemos implementar dessa forma para possibilitar que os lados direito e esquerdo do pipe pudessem ser criados, processados e executados corretamente.
 
 - Correção da mensagem de erro
 Solução apresentada no bloco correspondente (na main).
@@ -90,8 +101,9 @@ Em resumo: cd = "change directory" e não busca por processos.
 - open(3): open file - Linux man page. Disponível em: <https://linux.die.net/man/3/open>. Acesso em: 26 abr. 2025.
 
 ‌- dup() and dup2() Linux system call. Disponível em: <https://www.geeksforgeeks.org/dup-dup2-linux-system-call/>. Acesso em: 26 abr. 2025.
-? - vídeos do youtube
-TODO
+
+- JABK. What does dup2() do in C. Disponível em: <https://stackoverflow.com/questions/24538470/what-does-dup2-do-in-c>. Acesso em: 28 abr. 2025.
+
 */
 
 /****************************************************************
@@ -151,7 +163,7 @@ void runcmd(struct cmd *cmd) {
             fprintf(stderr, "Unknown command type\n");
             exit(-1);
 
-        case ' ': //! citado pelo enunciado
+        case ' ':
             ecmd = (struct execcmd *)cmd;
             if (ecmd->argv[0] == 0)
                 exit(0);
@@ -181,7 +193,7 @@ int fork1(void) {
     pid_t pid;
 
     if ((pid = fork()) < 0) {
-        fprintf(stderr, "Fork function fails\n");
+        //fprintf(stderr, "Fork function fails\n");
         exit(-1);
     } 
     return (pid);
@@ -194,7 +206,8 @@ void handle_simple_cmd(struct execcmd *ecmd) {
     if (ecmd->argv[0] == 0) 
         exit(0);
 
-    execvp(ecmd->argv[0], ecmd->argv);
+    execvp(ecmd->argv[0], ecmd->argv); // execvp passa o controle do processo atual para o comando lido
+    
     /* END OF TASK 2 */
 }
 
@@ -206,10 +219,10 @@ void handle_redirection(struct redircmd *rcmd) {
     int fd = open(rcmd->file, rcmd->mode, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); // permissões de leitura e escrita para o dono do arquivo, leitura para o grupo e outros
     if(rcmd->type == '<'){
         if(fd < 0) // caso haja erro na abertura do arquivo
-            exit(1);
+            exit(-1);
          else
         {
-            int d = dup2(fd, 0);
+            int d = dup2(fd, 0); // redireciona a entrada padrão para o arquivo no modo de leitura
             close(fd);
             if (d < 0) // erro na execução de dup2
                 exit(-1); 
@@ -218,10 +231,10 @@ void handle_redirection(struct redircmd *rcmd) {
     else if(rcmd->type == '>')
     {
         if(fd < 0) // caso haja erro na abertura do arquivo
-            exit(1);
+            exit(-1);
          else
         {
-            int d = dup2(fd, 1);
+            int d = dup2(fd, 1); // redireciona a saída padrão para o arquivo no modo de escrita
             close(fd);
             if (d < 0) // erro na execução de dup2
                 exit(-1); 
@@ -235,9 +248,35 @@ void handle_redirection(struct redircmd *rcmd) {
 
 void handle_pipe(struct pipecmd *pcmd, int *p, int r) {
      /* Task 4: Implement the code below to handle pipes. */
-    //todo conferir!!! tenho um rascunho
-    /* */
-    fprintf(stderr, "pipe not implemented\n");
+    int pipefd[2]; // pipefd[0] = descritor de leitura, pipefd[1] = descritor de escrita
+    if(pipe(pipefd) <= -1) // aplica a função pipe ao array e verifica se houve erro na criação do pipe
+        exit (1);
+
+    if (fork1() == 0){
+        close(pipefd[0]); // fecha o descritor de leitura
+        int d = dup2(pipefd[1], STDOUT_FILENO); // redireciona a saída padrão para o pipe
+        close(pipefd[1]);
+        if (d < 0) // erro na execução de dup2
+            exit(-1);
+        else
+            runcmd(pcmd->left); // executa o comando à esquerda do pipe
+    }    
+
+    if (fork1() == 0){
+        close(pipefd[1]); // fecha o descritor de escrita
+        int d = dup2(pipefd[0], STDIN_FILENO); // redireciona a entrada padrão para o pipe
+        close(pipefd[0]);
+        if (d < 0) // erro na execução de dup2
+            exit(-1);
+        else
+            runcmd(pcmd->right); // executa o comando à direita do pipe
+    }
+
+    close(pipefd[0]); // fecha o descritor de leitura
+    close(pipefd[1]); // fecha o descritor de escrita
+    wait(0); // espera o primeiro processo filho terminar
+    wait(0); // espera o segundo processo filho terminar
+   
     /* END OF TASK 4 */
 }
 

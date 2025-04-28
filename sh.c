@@ -35,7 +35,8 @@ Briefly describe the solutions implemented for this project and justify their ch
 - Correção da Função fork1:
 Implementamos a função `fork1` utilizando a syscall `fork()` com verificação de erro.
 A syscall 'fork()' já retorna em sua chamada o endereço que deve ser retornado na variavel pid ('Process ID')
-Caso falhe, imprime uma mensagem e encerra o programa.
+Caso falhe, encerra o programa. 
+Há uma mensagem de erro a ser apresentada com fprintf que foi comentada para evitar problemas com os testes automáticos, seguindo orientações do neunciado
 
 - Executando comandos simples:
 Implementamos a função 'handle_simple_cmd' para ler e executar comandos simples.
@@ -198,7 +199,7 @@ int fork1(void) {
     pid_t pid;
 
     if ((pid = fork()) < 0) {
-        fprintf(stderr, "Fork function fails\n");
+        // fprintf(stderr, "Fork function fails\n");
         exit(-1);
     } 
     return (pid);

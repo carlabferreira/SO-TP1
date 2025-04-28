@@ -27,7 +27,7 @@ Replace XX with the contribution of each group member in the development of the 
 
 Carla Beatriz Ferreira <carlabferreira@ufmg.br> 55%
 Manuela Monteiro Fernandes de Oliveira <manuelamfo@ufmg.br> 45%
-todo completar nome, email e porcentagem
+
 
 3. Solutions
 Briefly describe the solutions implemented for this project and justify their choices.
@@ -45,7 +45,11 @@ Caso contrário, a função 'execvp' recebe o nome do comando e um vetor de argu
 atual para o comando lido (que é essencialmente o que o comando exec faz)
 
 - Redirecionamento de Entrada e Saída
-TODO
+Implementamos a função 'handle_rdirection' para lidar com o redirecionamento de entrada e saída.
+
+O arquivo é aberto com a função 'open' e as permissõs para leitura e escrita por proprierário de arquivo, leitura para o grupo
+e leitura para outros usuários é definida. Então, um descritor de arquivo duplicado é criado com a função dup2, para possibilitar o redirecionamento da entrada e saída.
+Caso o redirecionamento seja de entrada, o descritor de arquivo é redirecionado para a entrada padrão (0), e se for de escrita, para a saída padrão(1).
 
 - Sequenciamento de Comandos
 TODO
@@ -79,14 +83,15 @@ Em resumo: cd = "change directory" e não busca por processos.
 - LINUX MAN PAGES. pipe(2) - Linux manual page. Disponível em: https://linux.die.net/man/2/pipe. 
     Acesso em: 15 abr. 2024.
 
+- How to use the execvp() function in C/C++ | DigitalOcean. Disponível em: <https://www.digitalocean.com/community/tutorials/execvp-function-c-plus-plus>. Acesso em: 26 abr. 2025.
+
+- GEEKSFORGEEKS. How to Redirect Output to a File and stdout. Disponível em: <https://www.geeksforgeeks.org/redirect-output-to-a-file-and-stdout/>. Acesso em: 26 abr. 2025.
+
+- open(3): open file - Linux man page. Disponível em: <https://linux.die.net/man/3/open>. Acesso em: 26 abr. 2025.
+
+‌- dup() and dup2() Linux system call. Disponível em: <https://www.geeksforgeeks.org/dup-dup2-linux-system-call/>. Acesso em: 26 abr. 2025.
 ? - vídeos do youtube
 TODO
-//? usei https://www.digitalocean.com/community/tutorials/execvp-function-c-plus-plus para descobrir o que a função execvp faz, isso entra nas referências?
-! refs que usei pra responder a handle_redirection:
-https://www.geeksforgeeks.org/redirect-output-to-a-file-and-stdout/
-https://linux.die.net/man/3/open
-https://www.geeksforgeeks.org/dup-dup2-linux-system-call/
-
 */
 
 /****************************************************************
@@ -186,8 +191,7 @@ int fork1(void) {
 
 void handle_simple_cmd(struct execcmd *ecmd) {
      /* Task 2: Implement the code below to execute simple commands. */
-    if (ecmd->argv[0] == 0) //? eu preciso colocar essa verificação aqui? digo, porque ela já foi feita na função runcmd
-
+    if (ecmd->argv[0] == 0) 
         exit(0);
 
     execvp(ecmd->argv[0], ecmd->argv);
@@ -196,18 +200,16 @@ void handle_simple_cmd(struct execcmd *ecmd) {
 
 void handle_redirection(struct redircmd *rcmd) {
      /* Task 3: Implement the code below to handle input/output redirection. */
-    if (rcmd->cmd == 0) //? eu preciso colocar essa verificação aqui? digo, porque ela já foi feita na função runcmd
+    if (rcmd->cmd == 0)
         exit(0);
     
-    int fd = 0;
-    // tentativa de abrir o arquivo nos respectivos modos
+    int fd = open(rcmd->file, rcmd->mode, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); // permissões de leitura e escrita para o dono do arquivo, leitura para o grupo e outros
     if(rcmd->type == '<'){
-        fd = open(rcmd->file, O_RDONLY);
         if(fd < 0) // caso haja erro na abertura do arquivo
             exit(1);
          else
         {
-            int d = dup2(fd, 0); //? antes estava fd, rcmd->fd e o erro continuava, por que será?
+            int d = dup2(fd, 0);
             close(fd);
             if (d < 0) // erro na execução de dup2
                 exit(-1); 
@@ -215,7 +217,6 @@ void handle_redirection(struct redircmd *rcmd) {
     }
     else if(rcmd->type == '>')
     {
-        fd = open(rcmd->file, O_WRONLY | O_CREAT | O_TRUNC, rcmd->mode);
         if(fd < 0) // caso haja erro na abertura do arquivo
             exit(1);
          else

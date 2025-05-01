@@ -7,5 +7,9 @@ Desenvolvido por Carla Ferreira e Manuela Monteiro a partir do código base forn
 
 Enunciado: https://drive.google.com/file/d/1mRimWj4UM_C6gIxhDlxJfw9GRVw_rUIn/view?usp=sharing e em [./auxiliares/Enunciado.pdf](./auxiliares/Enunciado.pdf)
 
-Informações úteis:
-- "Seu grupo deverá submeter no Moodle somente o arquivo sh.c, garantindo que o nome seja exatamente sh.c, para que o shell possa ser testado automaticamente. Qualquer outra forma de submissão será desconsiderada."
+Já há testes implementados que serão executados automaticamente com a execução de
+```
+make
+```
+Test Summary:
+Your code passed 8 of 8 tests.
